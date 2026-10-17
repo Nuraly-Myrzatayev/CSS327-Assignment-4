@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,9 +52,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TipTimeLayout(modifier: Modifier = Modifier) {
     var amountInput by remember { mutableStateOf("") }
+    var tipInput by remember { mutableStateOf("15") }
 
+    val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
     val amount = amountInput.toDoubleOrNull() ?: 0.0
-    val tip = calculateTip(amount)
+    val tip = calculateTip(amount, tipPercent)
     Column(
         modifier = Modifier
             .statusBarsPadding()
@@ -72,13 +75,21 @@ fun TipTimeLayout(modifier: Modifier = Modifier) {
         EditNumberField(label = R.string.bill_amount,
             value = amountInput,
             onValueChange = { amountInput = it },
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Next
+            ),
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
         )
         EditNumberField(label = R.string.tip_percentage,
-            value = "",
-            onValueChange = {},
+            value = tipInput,
+            onValueChange = {tipInput = it},
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done
+            ),
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
@@ -100,13 +111,14 @@ private fun calculateTip(amount: Double, tipPercent: Double = 15.0): String {
 fun EditNumberField(@StringRes label: Int,
                     value: String,
                     onValueChange: (String) -> Unit,
+                    keyboardOptions: KeyboardOptions,
                     modifier: Modifier = Modifier) {
     TextField(
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
         label = {Text(stringResource(label))},
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = keyboardOptions,
         modifier = modifier
     )
 }
