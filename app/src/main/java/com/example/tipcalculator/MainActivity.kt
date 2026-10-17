@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tipcalculator.ui.theme.TipCalculatorTheme
 import java.text.NumberFormat
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,12 +78,13 @@ fun TipTimeLayout(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Calculate Tip",
+            text = stringResource(R.string.calculate_tip),
             modifier = Modifier
                 .padding(bottom = 16.dp, top = 40.dp)
                 .align(alignment = Alignment.Start)
         )
         EditNumberField(label = R.string.bill_amount,
+            leadingIcon = R.drawable.money_24dp_e3e3e3_fill0_wght400_grad0_opsz24,
             value = amountInput,
             onValueChange = { amountInput = it },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -92,6 +96,7 @@ fun TipTimeLayout(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
         )
         EditNumberField(label = R.string.tip_percentage,
+            leadingIcon = R.drawable.percent_24dp_e3e3e3_fill0_wght400_grad0_opsz24,
             value = tipInput,
             onValueChange = {tipInput = it},
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -108,7 +113,7 @@ fun TipTimeLayout(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(bottom = 32.dp)
         )
         Text(
-            text = "Tip Amount: %s".format(tip),
+            text = stringResource(R.string.tip_amount_s).format(tip),
             style = MaterialTheme.typography.displaySmall
         )
         Spacer(modifier = Modifier.height(150.dp))
@@ -125,6 +130,7 @@ private fun calculateTip(amount: Double, tipPercent: Double = 15.0, roundUp: Boo
 
 @Composable
 fun EditNumberField(@StringRes label: Int,
+                    @DrawableRes leadingIcon: Int,
                     value: String,
                     onValueChange: (String) -> Unit,
                     keyboardOptions: KeyboardOptions,
@@ -135,6 +141,7 @@ fun EditNumberField(@StringRes label: Int,
         singleLine = true,
         label = {Text(stringResource(label))},
         keyboardOptions = keyboardOptions,
+        leadingIcon = { Icon(painter = painterResource(id = leadingIcon), null, modifier = Modifier.size(25.dp))  },
         modifier = modifier
     )
 }
@@ -148,7 +155,7 @@ fun RoundTheTipRow(roundUp: Boolean,
             .size(48.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "Round up?")
+        Text(text = stringResource(R.string.round_up))
         Switch(
             checked = roundUp,
             onCheckedChange = onRoundUpChanged,
