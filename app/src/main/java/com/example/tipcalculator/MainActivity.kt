@@ -74,7 +74,15 @@ fun TipTimeLayout(modifier: Modifier = Modifier) {
             onValueChange = { amountInput = it },
             modifier = Modifier
                 .padding(bottom = 32.dp)
-                .fillMaxWidth())
+                .fillMaxWidth()
+        )
+        EditNumberField(label = R.string.tip_percentage,
+            value = "",
+            onValueChange = {},
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth()
+        )
         Text(
             text = "Tip Amount: %s".format(tip),
             style = MaterialTheme.typography.displaySmall
