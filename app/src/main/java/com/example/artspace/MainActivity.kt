@@ -72,7 +72,15 @@ fun ArtWindow(modifier: Modifier = Modifier){
     Column(
         modifier = Modifier
             .padding(top = 10.dp,)
-
+            .dropShadow(
+                shape = RoundedCornerShape(0.dp),
+                shadow = Shadow(
+                    radius = 15.dp,
+                    color = Color(0xFF3b3b3b),
+                    spread = 0.dp,
+                    offset = DpOffset(10.dp, 10.dp)
+                )
+            )
     ) {
         Image(
             painter = image,
