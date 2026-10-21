@@ -56,6 +56,7 @@ import androidx.compose.ui.input.pointer.PointerInputEventHandler
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -87,24 +88,29 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
     var offsetX by remember { mutableStateOf(0f) }
     val resourcesStep =  when (currentStep) {
         1 -> ArtResource(R.drawable.cover1,
-            "Alpha, Gems and Junk",
-            "Del Northern (2019)")
+            stringResource(R.string.art1_Name),
+            stringResource(R.string.art1_Desc)
+        )
 
         2 -> ArtResource(R.drawable.cover2,
-            "Ambients and Instrumentals",
-            "Allegra \"Del\" Northern  (2017)")
+            stringResource(R.string.art2_Name),
+            stringResource(R.string.art2_Desc)
+        )
 
         3 -> ArtResource(R.drawable.cover3,
-            "Downpour",
-            "AnnoyingFlower (2023)")
+            stringResource(R.string.art3_Name),
+            stringResource(R.string.art3_Desc)
+        )
 
         4 -> ArtResource(R.drawable.cover4,
-            "The Watcher",
-            "Del Northern (2025)")
+            stringResource(R.string.art4_Name),
+            stringResource(R.string.art4_Desc)
+        )
 
         else -> ArtResource(R.drawable.cover1,
-            "Alpha, Gems and Junk",
-            "Del Northern (2019)")
+            stringResource(R.string.art1_Name),
+            stringResource(R.string.art1_Desc)
+        )
     }
     Column(
         modifier = Modifier
@@ -115,7 +121,6 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Text(text = offsetX.toString())
         ArtWindow(art = resourcesStep.image,
             DragWhile = { change, dragAmount ->
                 change.consume()
@@ -125,19 +130,19 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
                 offsetX = 0f},
             DragEnd = {
                 if (offsetX > 250f){
-                    if (currentStep==4){
-                        currentStep = 1
-                    }
-                    else{
-                        currentStep++
-                    }
-                }
-                else if (offsetX < -250f){
                     if (currentStep == 1){
                         currentStep = 4
                     }
                     else{
                         currentStep--
+                    }
+                }
+                else if (offsetX < -250f){
+                    if (currentStep==4){
+                        currentStep = 1
+                    }
+                    else{
+                        currentStep++
                     }
                 }
             })
@@ -178,7 +183,7 @@ fun ArtWindow(@DrawableRes art: Int,
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .padding(start = 12.dp, end = 12.dp, top = 5.dp)
-                .pointerInput(Unit){
+                .pointerInput(Unit) {
                     detectDragGestures(
                         onDrag = DragWhile,
                         onDragStart = DragStart,
@@ -194,7 +199,7 @@ fun ArtWindow(@DrawableRes art: Int,
                         spread = 0.dp,
                         offset = DpOffset(10.dp, 10.dp)
                     )
-            )
+                )
         )
     }
 

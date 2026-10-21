@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ArtSpace</string>
+    <string name="art1_Name">Alpha, Gems and Junk</string>
+    <string name="art2_Name">Ambients and Instrumentals</string>
+    <string name="art3_Name">Downpour</string>
+    <string name="art4_Name">The Watcher</string>
+    <string name="art1_Desc">Allegra \"Del\" Northern  (2019)</string>
+    <string name="art2_Desc">Allegra \"Del\" Northern  (2017)</string>
+    <string name="art3_Desc">AnnoyingFlower  (2023)</string>
+    <string name="art4_Desc">Allegra \"Del\" Northern  (2025)</string>
 </resources>
