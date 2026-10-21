@@ -11,6 +11,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -42,12 +44,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.PointerInputEventHandler
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -78,7 +84,7 @@ data class ArtResource(val image: Int, val name: String, val desc: String)
 @Composable
 fun ArtSpaceLayout(modifier: Modifier = Modifier){
     var currentStep by remember { mutableStateOf(1) }
-    var dlta by remember { mutableStateOf("Helooo") }
+    var offsetX by remember { mutableStateOf(0f) }
     val resourcesStep =  when (currentStep) {
         1 -> ArtResource(R.drawable.cover1,
             "Alpha, Gems and Junk",
@@ -104,16 +110,22 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
         modifier = Modifier
             .statusBarsPadding()
             .padding(horizontal = 15.dp, vertical = 5.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        Text(
-            text = dlta
-        )
-        ArtWindow(art = resourcesStep.image, onDrag = rememberDraggableState { delta ->
-            dlta = delta.toString()
-        })
+        Text(text = offsetX.toString())
+        ArtWindow(art = resourcesStep.image,
+            DragWhile = { change, dragAmount ->
+                change.consume()
+                offsetX += dragAmount.x
+            },
+            DragStart= {offset ->
+                offsetX = offset.x},
+            DragEnd = {
+
+            })
 
         Spacer(Modifier.height(12.dp))
         ArtText(name = resourcesStep.name, desc = resourcesStep.desc)
@@ -138,8 +150,12 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
 }
 
 @Composable
-fun ArtWindow(@DrawableRes art: Int, onDrag: DraggableState,modifier: Modifier = Modifier){
-    Column(
+fun ArtWindow(@DrawableRes art: Int,
+              DragStart: (Offset) -> Unit,
+              DragWhile: (PointerInputChange, Offset) -> Unit,
+              DragEnd: () -> Unit, modifier: Modifier = Modifier){
+
+    Column(modifier = Modifier.size(250.dp)
     ) {
         Image(
             painter = painterResource(id = art),
@@ -147,8 +163,14 @@ fun ArtWindow(@DrawableRes art: Int, onDrag: DraggableState,modifier: Modifier =
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .padding(start = 12.dp, end = 12.dp, top = 5.dp)
-                .draggable(orientation = Orientation.Horizontal,
-                    state = onDrag)
+                .pointerInput(Unit){
+                    detectDragGestures(
+                        onDrag = DragWhile,
+                        onDragStart = DragStart,
+                        onDragEnd = DragEnd,
+                        onDragCancel = { }
+                    )
+                }
                 .dropShadow(
                     shape = RoundedCornerShape(0.dp),
                     shadow = Shadow(
