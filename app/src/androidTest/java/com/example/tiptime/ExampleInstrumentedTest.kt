@@ -1,6 +1,8 @@
 package com.example.tiptime
 
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performTextInput
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.tipcalculator.TipTimeLayout
@@ -20,5 +22,7 @@ class ExampleInstrumentedTest {
         composeTestRule.setContent {
             TipTimeLayout()
         }
+        composeTestRule.onNodeWithText("Bill Amount").performTextInput("10")
+        composeTestRule.onNodeWithText("Tip Percentage").performTextInput("20")
     }
 }
