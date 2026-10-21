@@ -122,9 +122,24 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
                 offsetX += dragAmount.x
             },
             DragStart= {offset ->
-                offsetX = offset.x},
+                offsetX = 0f},
             DragEnd = {
-
+                if (offsetX > 250f){
+                    if (currentStep==4){
+                        currentStep = 1
+                    }
+                    else{
+                        currentStep++
+                    }
+                }
+                else if (offsetX < -250f){
+                    if (currentStep == 1){
+                        currentStep = 4
+                    }
+                    else{
+                        currentStep--
+                    }
+                }
             })
 
         Spacer(Modifier.height(12.dp))
