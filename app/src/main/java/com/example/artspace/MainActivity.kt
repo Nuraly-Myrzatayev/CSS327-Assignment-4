@@ -107,7 +107,22 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
         Spacer(Modifier.height(12.dp))
         ArtText(name = resourcesStep.name, desc = resourcesStep.desc)
         Spacer(Modifier.height(5.dp))
-        Buttons()
+        Buttons(onNextButtonClick = {
+                if (currentStep==4){
+                    currentStep = 1
+                }
+                else{
+                    currentStep++
+                }
+            },
+            onPrevButtonClick = {
+                if (currentStep == 1){
+                    currentStep = 4
+                }
+                else{
+                    currentStep--
+                }
+            })
     }
 }
 
@@ -162,8 +177,9 @@ fun ArtText(name: String, desc: String, modifier: Modifier = Modifier){
 }
 
 @Composable
-fun Buttons(modifier: Modifier = Modifier){
-    var counter = 0
+fun Buttons(onPrevButtonClick: () -> Unit,
+            onNextButtonClick: () -> Unit,
+            modifier: Modifier = Modifier){
     Row(
         modifier = Modifier
             .padding(top = 10.dp,)
@@ -171,7 +187,7 @@ fun Buttons(modifier: Modifier = Modifier){
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         OutlinedButton(
-            onClick = {counter++},
+            onClick = onPrevButtonClick,
             shape = RoundedCornerShape(15.dp)
         ){
             Text(
@@ -179,7 +195,7 @@ fun Buttons(modifier: Modifier = Modifier){
             )
         }
         OutlinedButton(
-            onClick = {counter++},
+            onClick = onNextButtonClick,
             shape = RoundedCornerShape(15.dp)
         ){
             Text(
