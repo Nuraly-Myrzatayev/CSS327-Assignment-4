@@ -1,9 +1,11 @@
 package com.example.artspace
 
+import android.media.Image
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,6 +31,10 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
@@ -36,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -63,9 +70,31 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+data class ArtResource(val image: Int, val name: String, val desc: String)
 @Composable
 fun ArtSpaceLayout(modifier: Modifier = Modifier){
+    var currentStep by remember { mutableStateOf(1) }
+    val resourcesStep =  when (currentStep) {
+        1 -> ArtResource(R.drawable.cover1,
+            "Alpha, Gems and Junk",
+            "Del Northern (2019)")
+
+        2 -> ArtResource(R.drawable.cover2,
+            "Ambients and Instrumentals",
+            "Allegra \"Del\" Northern  (2017)")
+
+        3 -> ArtResource(R.drawable.cover3,
+            "Downpour",
+            "AnnoyingFlower (2023)")
+
+        4 -> ArtResource(R.drawable.cover4,
+            "The Watcher",
+            "Del Northern (2025)")
+
+        else -> ArtResource(R.drawable.cover1,
+            "Alpha, Gems and Junk",
+            "Del Northern (2019)")
+    }
     Column(
         modifier = Modifier
             .statusBarsPadding()
@@ -74,21 +103,20 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        ArtWindow()
+        ArtWindow(art = resourcesStep.image)
         Spacer(Modifier.height(12.dp))
-        ArtText()
+        ArtText(name = resourcesStep.name, desc = resourcesStep.desc)
         Spacer(Modifier.height(5.dp))
         Buttons()
     }
 }
 
 @Composable
-fun ArtWindow(modifier: Modifier = Modifier){
-    val image = painterResource(R.drawable.cover1)
+fun ArtWindow(@DrawableRes art: Int, modifier: Modifier = Modifier){
     Column(
     ) {
         Image(
-            painter = image,
+            painter = painterResource(id = art),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             modifier = Modifier
@@ -108,7 +136,7 @@ fun ArtWindow(modifier: Modifier = Modifier){
 }
 
 @Composable
-fun ArtText(modifier: Modifier = Modifier){
+fun ArtText(name: String, desc: String, modifier: Modifier = Modifier){
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
@@ -121,12 +149,12 @@ fun ArtText(modifier: Modifier = Modifier){
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Alpha, Gems and Junk",
+                text = name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 25.sp
             )
             Text(
-                text = "Del Northern (2019)",
+                text = desc,
                 fontSize = 20.sp
             )
         }
