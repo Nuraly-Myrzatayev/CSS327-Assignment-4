@@ -9,6 +9,10 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.DraggableState
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,6 +78,7 @@ data class ArtResource(val image: Int, val name: String, val desc: String)
 @Composable
 fun ArtSpaceLayout(modifier: Modifier = Modifier){
     var currentStep by remember { mutableStateOf(1) }
+    var dlta by remember { mutableStateOf("Helooo") }
     val resourcesStep =  when (currentStep) {
         1 -> ArtResource(R.drawable.cover1,
             "Alpha, Gems and Junk",
@@ -103,7 +108,13 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ){
-        ArtWindow(art = resourcesStep.image)
+        Text(
+            text = dlta
+        )
+        ArtWindow(art = resourcesStep.image, onDrag = rememberDraggableState { delta ->
+            dlta = delta.toString()
+        })
+
         Spacer(Modifier.height(12.dp))
         ArtText(name = resourcesStep.name, desc = resourcesStep.desc)
         Spacer(Modifier.height(5.dp))
@@ -127,7 +138,7 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
 }
 
 @Composable
-fun ArtWindow(@DrawableRes art: Int, modifier: Modifier = Modifier){
+fun ArtWindow(@DrawableRes art: Int, onDrag: DraggableState,modifier: Modifier = Modifier){
     Column(
     ) {
         Image(
@@ -136,6 +147,8 @@ fun ArtWindow(@DrawableRes art: Int, modifier: Modifier = Modifier){
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .padding(start = 12.dp, end = 12.dp, top = 5.dp)
+                .draggable(orientation = Orientation.Horizontal,
+                    state = onDrag)
                 .dropShadow(
                     shape = RoundedCornerShape(0.dp),
                     shadow = Shadow(
