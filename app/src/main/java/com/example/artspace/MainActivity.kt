@@ -78,22 +78,22 @@ fun ArtSpaceLayout(modifier: Modifier = Modifier){
 fun ArtWindow(modifier: Modifier = Modifier){
     val image = painterResource(R.drawable.cover1)
     Column(
-        modifier = Modifier
-            .padding(12.dp)
-            .dropShadow(
-                shape = RoundedCornerShape(0.dp),
-                shadow = Shadow(
-                    radius = 15.dp,
-                    color = Color(0xFF3b3b3b),
-                    spread = 0.dp,
-                    offset = DpOffset(10.dp, 10.dp)
-                )
-            )
     ) {
         Image(
             painter = image,
             contentDescription = null,
             contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .padding(start = 12.dp, end = 12.dp, top = 5.dp)
+                .dropShadow(
+                    shape = RoundedCornerShape(0.dp),
+                    shadow = Shadow(
+                        radius = 15.dp,
+                        color = Color(0xFF3b3b3b),
+                        spread = 0.dp,
+                        offset = DpOffset(10.dp, 10.dp)
+                    )
+            )
         )
     }
 
