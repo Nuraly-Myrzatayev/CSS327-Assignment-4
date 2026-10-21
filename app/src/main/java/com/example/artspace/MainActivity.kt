@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,8 @@ import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -139,15 +142,17 @@ fun Buttons(modifier: Modifier = Modifier){
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Button(
-            onClick = {counter++}
+        OutlinedButton(
+            onClick = {counter++},
+            shape = RoundedCornerShape(15.dp)
         ){
             Text(
                 text = "Previous"
             )
         }
-        Button(
-            onClick = {counter++}
+        OutlinedButton(
+            onClick = {counter++},
+            shape = RoundedCornerShape(15.dp)
         ){
             Text(
                 text = "Next"
