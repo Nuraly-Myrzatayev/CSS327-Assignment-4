@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import org.junit.Rule
+import java.text.NumberFormat
 
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
@@ -24,5 +25,7 @@ class ExampleInstrumentedTest {
         }
         composeTestRule.onNodeWithText("Bill Amount").performTextInput("10")
         composeTestRule.onNodeWithText("Tip Percentage").performTextInput("20")
+        val expectedTip = NumberFormat.getCurrencyInstance().format(2)
+        composeTestRule.onNodeWithText("Tip Amount: $expectedTip").assertExists("No node with this text was found.")
     }
 }
